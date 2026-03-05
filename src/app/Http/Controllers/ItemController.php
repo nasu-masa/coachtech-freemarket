@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Requests\ExhibitionRequest;
+use App\Models\Item;
+use App\Models\Category;
+
+class ItemController extends Controller
+{
+    public function index(Request $request)
+    {
+        if ($request->filled('keyword')) {
+            session(['keyword' => $request->keyword]);
+        } elseif ($request->has('keyword')) {
+            session()->forget('keyword');
+        }
+
+        $keyword = $request->input('keyword', session('keyword'));
+
+        $tab     = $request->query('tab', 'recommend');
+
+        $query = Item::where('user_id', '!=', auth()->id());
+
+        if ($tab === 'myList' && auth()->check()) {
+            $query->whereHas('myListItems', function ($q) {
+                $q->where('user_id', auth()->id());
+            });
+        }
+
+        $items = $query->search($keyword)->get();
+
+        return view('items.index', compact('items', 'keyword', 'tab'));
+    }
+
+    public function show($item_id)
+    {
+        $item = Item::with(['categories'])
+                    ->withCount(['comments', 'myListItems'])
+                    ->findOrFail($item_id);
+
+        $categories   = $item->categories;
+
+        $isLiked      = $item->isLikedBy(auth()->id());
+
+        $likeCount    = $item->likeCount();
+
+        $content      = $item->latestComment;
+
+        $contentCount = $item->commentCount();
+
+        $avatar       = $content?->user?->avatar_path ?? null;
+
+        return view('items.show', compact(
+            'item',
+            'categories',
+            'isLiked',
+            'likeCount',
+            'content',
+            'contentCount',
+            'avatar',
+        ));
+    }
+
+    public function create()
+    {
+        $categories = Category::all();
+
+        return view('items.create', compact('categories'));
+    }
+
+    public function store(ExhibitionRequest $request)
+    {
+        $item = Item::createFromRequest($request);
+
+        return redirect()->route('item.show', $item->id);
+    }
+}
+
