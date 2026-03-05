@@ -30,13 +30,45 @@ composer install
 
 code .
 
-cp .env.example .env  ※環境変数適宣変更
+cp .env.example .env  # 必要に応じて環境変数を変更
 
 php artisan key:generate
 
+```
+
+# ◆ storage ディレクトリの初期化
+
+ホスト側で実行：
+```bash
+mkdir -p src/storage/framework/sessions
+mkdir -p src/storage/framework/views
+mkdir -p src/storage/framework/cache
+```
+
+コンテナ内で権限を修正：
+```bash
+chown -R www-data:www-data storage
+chmod -R 775 storage
+
+```
+# ◆ storage をホストと共有する理由（画像保存のため）
+docker-compose.yml の php と nginx に以下を追加しています：
+
+yaml
+volumes:
+  - ./src/storage:/var/www/storage
+
+理由：
+- storage は Git に含まれない
+- Docker はホスト側の storage を上書きする
+- Laravel は storage/framework を自動生成しない
+- 画像アップロードをホスト側でも確認できるようにするため
+
+# ◆ マイグレーション & シーディング
+
+```bash
 php artisan migrate
 php artisan db:seed
-
 php artisan storage:link
 ```
 
@@ -45,16 +77,17 @@ php artisan storage:link
 1. テスト用 `.env.testing` ファイルの作成とアプリキーの生成
 
 ```bash
-cp .env .env.testing  ※環境変数的線変更
+cp .env .env.testing  # 必要に応じて環境変数を変更
 
 # .env.testing の変更ポイント
 APP_ENV=testing
 APP_DEBUG=true
 DB_CONNECTION=mysql
 DB_DATABASE=demo_test   ← テスト用DB名
-DB_USERNAME=root
-DB_PASSWORD=your_password
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
 
+# .env からコピーしたAPP_KEYを削除し .env.testing用に作り直します
 php artisan key:generate --env=testing
 ```
 
@@ -71,22 +104,40 @@ docker exec -it <mysqlコンテナ名> bash
 mysql -u root -p
 CREATE DATABASE demo_test;
 SHOW DATABASES;
+exit;
+exit;
 ```
 
 ※ <mysqlコンテナ名> は docker ps で確認できます。
-
-ローカル MySQL を使う場合：
-
-```bash
-mysql -u root -p
-CREATE DATABASE demo_test;
-SHOW DATABASES;
-```
 
 3. テスト用マイグレーションの実行
    テスト DB を作成したら、テーブルを作成します。
 
 ```bash
+docker compose exec php bash
+php artisan migrate:fresh --env=testing
+```
+
+もし権限エラーが出た場合：
+
+```bash
+docker compose exec mysql bash
+mysql -u root -p
+```
+
+laravel_user に権限を付与する：
+
+```bash
+GRANT ALL PRIVILEGES ON demo_test.* TO 'laravel_user'@'%';
+FLUSH PRIVILEGES;
+exit;
+exit;
+```
+
+再度migrate:freshを実行してください
+
+```bash
+docker compose exec php bash
 php artisan migrate:fresh --env=testing
 ```
 
@@ -123,14 +174,14 @@ STRIPE_SECRET=sk_test_1234567890abcdef
 
 ## ◆ 開発環境 URL
 
-| 機能                  | URL                       |
-| --------------------- | ------------------------- |
+| 機能                 | URL                       |
+| -------------------- | ------------------------- |
 | トップページ          | http://localhost/         |
 | ユーザー登録          | http://localhost/register |
-| phpMyAdmin            | http://localhost:8080/    |
+| phpMyAdmin           | http://localhost:8080/    |
 | MailHog（メール確認） | http://localhost:8025/    |
 
-# ◎ 🗂 テーブル仕様書 & ER図
+# ◎ テーブル仕様書 & ER図
 
 本アプリケーションは、仕様書（US001〜US009）に基づき
 データベース設計を行っています。
@@ -175,7 +226,7 @@ ER図では以下のエンティティを定義しています：
 
 ---
 
-# ◎ 🧩 使用技術（実行環境）
+# ◎ 使用技術（実行環境）
 
 - **PHP 8.x**
 - **Laravel 8**
@@ -247,7 +298,7 @@ ER図では以下のエンティティを定義しています：
 CSS・JavaScript はページ単位と共通コンポーネントに分割されています。
 詳細は `public/css/` および `public/js/` ディレクトリを参照してください。
 
-# ◎ 🧩 主な機能一覧（仕様書 US001〜US009 に準拠）
+# ◎ 主な機能一覧（仕様書 US001〜US009 に準拠）
 
 ## ◆ 認証（US001〜US003）
 
@@ -300,6 +351,6 @@ CSS・JavaScript はページ単位と共通コンポーネントに分割され
 - Stripe Checkout にリダイレクト
 - 決済完了後、トップページへ遷移
 
-# ◎ 📄 ライセンス
+# ◎ ライセンス
 
 このプロジェクトは学習目的で作成されています。

@@ -14,9 +14,14 @@
         <div class="c-profile__left">
 
             {{-- プロフィール --}}
-            <img src="{{ $user->avatar_path ?? asset('assets/default.icon.png') }}"
+            @if (!empty($user->avatar_path))
+            <img src="{{ $user->avatar_path ?? '' }}"
                 alt="プロフィール画像"
+                id="preview"
                 class="c-profile-image">
+            @else
+            <div class="c-profile-image"></div>
+            @endif
 
             <h2 class="c-profile__name">{{ $user->name }}</h2>
         </div>
