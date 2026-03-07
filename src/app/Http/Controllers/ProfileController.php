@@ -19,7 +19,7 @@ class ProfileController extends Controller
 
         $items =  match ($tab) {
             'buy'  => $user->purchasedItems(),
-            'sell' => $user->items,
+            'sell' => $user->items
         };
 
         return view('mypage.index', compact('tab', 'user', 'items'));
@@ -37,14 +37,10 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar_path = '/storage/' . $path;
-            $user->save();
-        }
-
-        $user->name = $request->name;
-        $user->save();
+        $user->storeProfile([
+            'name' => $request->name,
+            'avatar' => $request->file('avatar')
+        ]);
 
         $user->addAddress($request->only('postal_code', 'address', 'building'));
 

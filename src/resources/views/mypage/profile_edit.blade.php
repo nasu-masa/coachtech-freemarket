@@ -17,14 +17,14 @@
         {{-- プロフィール画像 --}}
 
         <div class="c-profile-input">
-            @if (!empty($user->avatar_path))
-            <img src="{{ $user->avatar_path ?? '' }}"
+            @imageExists($user->avatar_path)
+            <img src="{{ asset('storage/' . $user->avatar_path ?? '') }}"
                 alt="プロフィール画像"
                 id="preview"
                 class="c-profile-image">
             @else
             <div class="c-profile-image"></div>
-            @endif
+            @endimageExists
 
             <label for="imageInput" class="
                         c-image-button

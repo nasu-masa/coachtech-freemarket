@@ -26,8 +26,7 @@
     @foreach ($items as $item)
     <div class="c-product-card">
         <a href="{{ route('item.show', ['item_id' => $item->id]) }}" class="c-product-card__link">
-
-            @if (!empty($item->image_path))
+            @imageExists($item->image_path)
             <div class="c-product-card__image-wrapper
                 {{ $item->status === 'sold' ? 'is-sold' : '' }}">
                 <img src="{{ asset('storage/' . $item->image_path) }}"
@@ -36,13 +35,12 @@
             </div>
             @else
             <div class="c-product-card__no-image">商品画像</div>
-            @endif
+            @endimageExists
 
             <p class="c-product-card__name">{{ $item->name }}</p>
         </a>
     </div>
     @endforeach
 </div>
-
 
 @endsection

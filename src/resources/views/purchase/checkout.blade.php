@@ -18,10 +18,14 @@
 
             {{-- 商品情報 --}}
             <div class="p-purchase__item">
+                @imageExists($item->image_path)
                 <img
                     src="{{ asset('storage/' . $item->image_path) }}"
                     alt="商品画像"
-                    class="p-purchase__item-image">
+                    class="c-product-card__image p-purchase__item-image">
+                @else
+                <div class="c-product-card__no-image">商品画像</div>
+                @endimageExists
 
                 <div class="p-purchase__item-info">
                     <h2 class="p-purchase__item-name">{{ $item->name }}</h2>

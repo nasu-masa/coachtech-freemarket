@@ -42,6 +42,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
     }
 
+    public function storeProfile(array $attributes)
+    {
+        $this->fill($attributes);
+
+        if(isset($attributes['avatar']) && $attributes['avatar']) {
+            $path = $attributes['avatar']->store('avatars', 'public');
+            $this->avatar_path = $path;
+
+            $this->save();
+        }
+    }
+
     public function items()
     {
         return $this->hasMany(Item::class);

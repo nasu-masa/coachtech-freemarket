@@ -21,22 +21,7 @@ cd coachtech-freemarket
 docker-compose up -d --build
 ```
 
-## ◆ Laravel セットアップ
-
-```bash
-docker-compose exec php bash
-
-composer install
-
-code .
-
-cp .env.example .env  # 必要に応じて環境変数を変更
-
-php artisan key:generate
-
-```
-
-# ◆ storage ディレクトリの初期化
+# ◆ storage ディレクトリの初期化と共有
 
 ホスト側で実行：
 ```bash
@@ -47,22 +32,35 @@ mkdir -p src/storage/framework/cache
 
 コンテナ内で権限を修正：
 ```bash
+docker-compose exec php bash
 chown -R www-data:www-data storage
 chmod -R 775 storage
 
 ```
-# ◆ storage をホストと共有する理由（画像保存のため）
-docker-compose.yml の php と nginx に以下を追加しています：
+# ◆ storageディレクトリを初期化しホストと共有する理由
 
+Laravel の storage は、キャッシュ・セッション・ビュー・アップロード画像など
+アプリが書き込むファイルを保存する重要なディレクトリです。
+
+Docker コンテナ内の storage は再起動で消えてしまうため、
+ホスト側の storage をコンテナに共有（マウント）して使用します。
+
+```bash
 yaml
 volumes:
   - ./src/storage:/var/www/storage
+```
 
-理由：
-- storage は Git に含まれない
-- Docker はホスト側の storage を上書きする
-- Laravel は storage/framework を自動生成しない
-- 画像アップロードをホスト側でも確認できるようにするため
+## ◆ Laravel セットアップ
+
+```bash
+composer install
+
+cp .env.example .env  # 必要に応じて環境変数を変更
+
+php artisan key:generate
+
+```
 
 # ◆ マイグレーション & シーディング
 
@@ -125,7 +123,7 @@ docker compose exec mysql bash
 mysql -u root -p
 ```
 
-laravel_user に権限を付与する：
+権限を付与する：
 
 ```bash
 GRANT ALL PRIVILEGES ON demo_test.* TO 'laravel_user'@'%';

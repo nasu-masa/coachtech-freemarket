@@ -140,6 +140,10 @@
     font-size: 64px;
 }
 
+.p-item-detail__no-image {
+    font-size: 32px;
+}
+
 /* ============================
     Content Area
 ============================ */
@@ -288,7 +292,6 @@
 }
 
 .p-item-detail__category {
-    min-width: 120px;
     height: 30px;
     padding: 0 16px;
     background-color: #d9d9d9;
@@ -384,10 +387,9 @@
 }
 
 .p-purchase__item-image {
-    width: 178px;
-    height: 178px;
+    max-width: 178px;
+    max-height: 178px;
     margin-right: 56px;
-    object-fit: cover;
 }
 
 .p-purchase__item-name {

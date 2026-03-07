@@ -7,15 +7,18 @@
     <div class="p-item-detail__image-container">
 
         <div class="p-item-detail__image-card {{ $item->status === 'sold' ? 'is-sold' : '' }}">
-            @if (!empty($item->image_path))
-            <img src="{{ asset('storage/' . $item->image_path) }}"
-                alt="商品画像"
-                class="c-product-card__image">
+            @imageExists($item->image_path)
+            <div class="c-product-card__image-wrapper
+                {{ $item->status === 'sold' ? 'is-sold' : '' }}">
+                <img src="{{ asset('storage/' . $item->image_path) }}"
+                    alt="商品画像"
+                    class="c-product-card__image">
+            </div>
             @else
             <div class="c-product-card__no-image p-item-detail__no-image">
                 商品画像
             </div>
-            @endif
+            @endimageExists
         </div>
 
     </div>
@@ -116,7 +119,7 @@
             <div class="p-item-detail__comments-user">
 
                 <div class="p-item-detail__comments-user-image"
-                    style="background-image: url('{{ $avatar }}')">
+                    style="background-image: url('{{ asset("storage/$avatar") }}')">
                 </div>
 
                 <label class="p-item-detail__comments-user-name">
