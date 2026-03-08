@@ -33,6 +33,8 @@ mkdir -p src/storage/framework/cache
 コンテナ内で権限を修正：
 ```bash
 docker-compose exec php bash
+```
+```bash
 chown -R www-data:www-data storage
 chmod -R 775 storage
 
@@ -60,12 +62,16 @@ cp .env.example .env  # 必要に応じて環境変数を変更
 
 php artisan key:generate
 
+exit
+
+code .
+
 ```
 
 # ◆ マイグレーション & シーディング
 
 ```bash
-php artisan migrate
+php artisan migrate:fresh
 php artisan db:seed
 php artisan storage:link
 ```
@@ -76,7 +82,7 @@ php artisan storage:link
 
 ```bash
 cp .env .env.testing  # 必要に応じて環境変数を変更
-
+```
 # .env.testing の変更ポイント
 APP_ENV=testing
 APP_DEBUG=true
@@ -86,6 +92,7 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
 # .env からコピーしたAPP_KEYを削除し .env.testing用に作り直します
+```bash
 php artisan key:generate --env=testing
 ```
 
@@ -129,13 +136,14 @@ mysql -u root -p
 GRANT ALL PRIVILEGES ON demo_test.* TO 'laravel_user'@'%';
 FLUSH PRIVILEGES;
 exit;
-exit;
 ```
-
+```bash
+exit;
+docker compose exec php bash
+```
 再度migrate:freshを実行してください
 
 ```bash
-docker compose exec php bash
 php artisan migrate:fresh --env=testing
 ```
 
@@ -157,16 +165,16 @@ Stripe / AWS / Pusher などの秘密情報は 空欄のままで OK。
 composer require stripe/stripe-php
 ```
 
-```
+---
 ### ◆ Stripe の環境変数（.env）
 
-```bash
+
 # Stripe
 STRIPE_KEY=pk_test_1234567890abcdef
 STRIPE_SECRET=sk_test_1234567890abcdef
-```
 
-※ 本アプリでは Stripe の「テスト用のkey（pk_test / sk_test）」を使用しています。
+
+※ 本アプリでは Stripe の「テスト用のkey（pk_test / sk_test）」を使用しているため各々のテスト用test-keyをご使用ください。
   Feature テストでは StripeService をモック(代用品を使用)しているため、Stripe API は実際には呼ばれません。
 
 

@@ -6,10 +6,11 @@
 
     <div class="p-item-detail__image-container">
 
-        <div class="p-item-detail__image-card {{ $item->status === 'sold' ? 'is-sold' : '' }}">
+        <div class="p-item-detail__image-card">
             @imageExists($item->image_path)
             <div class="c-product-card__image-wrapper
-                {{ $item->status === 'sold' ? 'is-sold' : '' }}">
+                        p-item-detail__image
+                        {{ $item->status === 'sold' ? 'is-sold' : '' }}">
                 <img src="{{ asset('storage/' . $item->image_path) }}"
                     alt="商品画像"
                     class="c-product-card__image">
@@ -132,7 +133,6 @@
                     {{ $content?->content ?? 'こちらにコメントが入ります。' }}
                 </span>
             </p>
-
 
             <form action="{{ route('item.comments.store', ['item_id' => $item->id]) }}"
                 method="post"

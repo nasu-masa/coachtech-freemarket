@@ -136,7 +136,7 @@
     background: #000;
 }
 
-.p-item-detail__image-card.is-sold::after {
+.p-item-detail__image {
     font-size: 64px;
 }
 

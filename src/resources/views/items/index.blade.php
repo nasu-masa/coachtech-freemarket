@@ -28,7 +28,8 @@
         <a href="{{ route('item.show', ['item_id' => $item->id]) }}" class="c-product-card__link">
             @imageExists($item->image_path)
             <div class="c-product-card__image-wrapper
-                {{ $item->status === 'sold' ? 'is-sold' : '' }}">
+                        c-image-wrapper-lg
+                        {{ $item->status === 'sold' ? 'is-sold' : '' }}">
                 <img src="{{ asset('storage/' . $item->image_path) }}"
                     alt="商品画像"
                     class="c-product-card__image">
