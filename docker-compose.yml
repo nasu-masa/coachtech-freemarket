@@ -33,12 +33,14 @@ services:
 
     mailhog:
         image: mailhog/mailhog
+        platform: linux/amd64
         ports:
             - "1025:1025"
             - "8025:8025"
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
+        platform: linux/amd64
         environment:
             - PMA_ARBITRARY=1
             - PMA_HOST=mysql
