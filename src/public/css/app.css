@@ -132,10 +132,6 @@
     padding: 36px 45px;
 }
 
-.p-item-detail__image-card {
-    background: #000;
-}
-
 .p-item-detail__image {
     font-size: 64px;
 }
@@ -386,7 +382,7 @@
     margin-bottom: 50px;
 }
 
-.p-purchase__item-image {
+.p-purchase__item-image-wrapper {
     max-width: 178px;
     max-height: 178px;
     margin-right: 56px;

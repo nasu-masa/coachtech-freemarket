@@ -7,19 +7,18 @@
     <div class="p-item-detail__image-container">
 
         <div class="p-item-detail__image-card">
-            @imageExists($item->image_path)
             <div class="c-product-card__image-wrapper
                         p-item-detail__image
                         {{ $item->status === 'sold' ? 'is-sold' : '' }}">
                 <img src="{{ asset('storage/' . $item->image_path) }}"
-                    alt="商品画像"
-                    class="c-product-card__image">
+                    alt=""
+                    class="c-product-card__image"
+                    onerror="
+                    this.style.display='none';
+                    this.parentElement.classList.remove('is-sold');
+                    this.parentElement.classList.add('c-product-card__no-image', 'p-item-detail__no-image');
+                    this.parentElement.innerText='商品画像';">
             </div>
-            @else
-            <div class="c-product-card__no-image p-item-detail__no-image">
-                商品画像
-            </div>
-            @endimageExists
         </div>
 
     </div>

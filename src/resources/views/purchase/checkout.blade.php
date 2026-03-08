@@ -18,16 +18,18 @@
 
             {{-- 商品情報 --}}
             <div class="p-purchase__item">
-                @imageExists($item->image_path)
-                <img
-                    src="{{ asset('storage/' . $item->image_path) }}"
-                    alt="商品画像"
-                    class="c-product-card__image p-purchase__item-image">
-                @else
-                <div class="c-product-card__no-image">商品画像</div>
-                @endimageExists
+                <div class="p-purchase__item-image-wrapper">
+                    <img
+                        src="{{ asset('storage/' . $item->image_path) }}"
+                        alt=""
+                        class="c-product-card__image p-purchase__item-image"
+                        onerror="
+                        this.parentElement.classList.add('c-product-card__no-image');
+                        this.parentElement.innerText='商品画像';">
+                </div>
 
-                <div class="p-purchase__item-info">
+
+                <div class=" p-purchase__item-info">
                     <h2 class="p-purchase__item-name">{{ $item->name }}</h2>
                     <p class="p-purchase__item-price">
                         ¥<span class="p-purchase__item-price--value">

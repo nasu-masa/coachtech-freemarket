@@ -14,14 +14,10 @@
         <div class="c-profile__left">
 
             {{-- プロフィール --}}
-            @imageExists($user->avatar_path)
             <img src="{{ asset('storage/' .$user->avatar_path) }}"
-                alt="プロフィール画像"
+                alt=""
                 id="preview"
                 class="c-profile-image">
-            @else
-            <div class="c-profile-image"></div>
-            @endimageExists
 
             <h2 class="c-profile__name">{{ $user->name }}</h2>
         </div>
@@ -54,16 +50,16 @@
     <div class="c-product-card">
         <a href="{{ route('item.show', ['item_id' => $item->id]) }}"
             class="c-product-card__link">
-            @imageExists($item->image_path)
             <div class="c-product-card__image-wrapper
                 {{ $tab === 'buy' ? '' : ($item->status === 'sold' ? 'is-sold' : '') }}">
                 <img src="{{ asset('storage/' . $item->image_path) }}"
-                    alt="商品画像"
-                    class="c-product-card__image">
+                    alt=""
+                    class="c-product-card__image"
+                    onerror="
+                    this.style.display='none';
+                    this.parentElement.classList.add('c-product-card__no-image');
+                    this.parentElement.innerText='商品画像';">
             </div>
-            @else
-            <div class="c-product-card__no-image">商品画像</div>
-            @endif
 
             <p class="c-product-card__name">{{ $item->name }}</p>
         </a>

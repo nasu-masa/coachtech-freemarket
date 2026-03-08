@@ -14,7 +14,6 @@ class UserProfileTest extends TestCase
 
     public function test_マイページにユーザー情報が表示される()
     {
-        /** @var \App\Models\User $user */
         $user = User::factory()->withAddress()->create([
             'name' => 'テスト太郎',
             'avatar_path' => 'test-avatar.png',
