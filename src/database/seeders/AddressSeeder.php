@@ -14,15 +14,16 @@ class AddressSeeder extends Seeder
 
         $users = User::all();
 
-        $raw = $faker->postcode();
-
-        $postal = preg_replace(
-            '/^(\d{3})-?(\d{4})$/',
-            '$1-$2',
-            $raw
-        );
-
         foreach ($users as $user) {
+
+            $raw = $faker->postcode();
+
+            $postal = preg_replace(
+                '/^(\d{3})-?(\d{4})$/',
+                '$1-$2',
+                $raw
+            );
+
             $user->addresses()->create([
                 'user_id'     => $user->id,
                 'postal_code' => $postal,
