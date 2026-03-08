@@ -65,7 +65,6 @@ php artisan key:generate
 exit
 
 code .
-
 ```
 
 # ◆ マイグレーション & シーディング
