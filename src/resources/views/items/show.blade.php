@@ -123,7 +123,7 @@
                 </div>
 
                 <label class="p-item-detail__comments-user-name">
-                    {{ $content->user->name ?? 'admin' }}
+                    {{ $content?->user->name ?? 'admin' }}
                 </label>
             </div>
 
