@@ -11,7 +11,6 @@ class Item extends Model
 
     protected $fillable = [
         'user_id',
-        'category_id',
         'name',
         'description',
         'price',
@@ -48,7 +47,7 @@ class Item extends Model
             ->exists();
     }
 
-    public function likeCount()
+    public function likesCount()
     {
         return $this->my_list_item_count ?? $this->myListItems()->count();
     }
@@ -63,7 +62,7 @@ class Item extends Model
         return $this->hasOne(Comment::class)->latestOfMany();
     }
 
-    public function commentCount()
+    public function commentsCount()
     {
         return $this->comments_count ?? $this->comments()->count();
     }
@@ -71,8 +70,10 @@ class Item extends Model
     public function scopeSearch($query, $keyword)
     {
         if (!empty($keyword)) {
-            $query->where('name', 'like', '%' . $keyword . '%');
+            return $query->where('name', 'like', '%' . $keyword . '%');
         }
+
+        return $query;
     }
 
     public static function createFromAttributes(array $attributes)

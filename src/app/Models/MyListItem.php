@@ -33,18 +33,21 @@ class MyListItem extends Model
 
     public static function add($user, $item_id)
     {
-        $existing = self::myListedItem($user, $item_id);
-        if (!$existing) {
-            return self::firstOrCreate([
-                'user_id' => $user->id,
-                'item_id' => $item_id,
-            ]);
-        }
+        return self::firstOrCreate([
+            'user_id' => $user->id,
+            'item_id' => $item_id,
+        ]);
     }
 
     public static function remove($user, $item_id)
     {
         $existing = self::myListedItem($user, $item_id);
-        if ($existing) $existing->delete();
+
+        if ($existing) {
+            $existing->delete();
+            return true;
+        }
+
+        return false;
     }
 }

@@ -6,8 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
-
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -58,22 +58,21 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function purchasedItems()
     {
-        return Item::whereIn(
-            'id',
-            $this->purchases()->pluck('item_id')
-        )->get();
+        return $this->purchases()->with('item')->get()->pluck('item');
     }
 
     public function purchaseItem(Item $item, string $paymentMethod): Purchase
     {
-        $item->update(['status' => 'sold']);
+        return DB::transaction(function () use ($item, $paymentMethod) {
+            $item->update(['status' => 'sold']);
 
-        return $this->purchases()->create([
-            'item_id'        => $item->id,
-            'address_id'     => $this->latestAddress->id,
-            'payment_method' => $paymentMethod,
-            'purchased_at'   => now(),
-        ]);
+            return $this->purchases()->create([
+                'item_id'        => $item->id,
+                'address_id'     => $this->latestAddress->id,
+                'payment_method' => $paymentMethod,
+                'purchased_at'   => now(),
+            ]);
+        });
     }
 
     public function addresses()

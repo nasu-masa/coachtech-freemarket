@@ -39,18 +39,15 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.store');
 
 Route::middleware('auth')->group(function () {
 
-    // ログアウト
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
     // いいね
     Route::post('/item/{item_id}/like', [MyListItemController::class, 'store'])
         ->name('item.like');
 
-    // コメント
+    // いいね解除
     Route::post('/item/{item_id}/unlike', [MyListItemController::class, 'destroy'])
         ->name('item.unlike');
 
-    // 購入フロー
+    // コメント
     Route::post('/item/{item_id}/comments', [CommentController::class, 'store'])
         ->name('item.comments.store');
 

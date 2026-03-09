@@ -18,6 +18,7 @@ class Address extends Model
 
     public function user()
     {
+
         return $this->belongsTo(User::class);
     }
 
@@ -26,4 +27,3 @@ class Address extends Model
         return $this->hasMany(Purchase::class);
     }
 }
-

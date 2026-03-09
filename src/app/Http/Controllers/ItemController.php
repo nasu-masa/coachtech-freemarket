@@ -44,16 +44,16 @@ class ItemController extends Controller
 
         $isLiked      = $item->isLikedBy(auth()->id());
 
-        $likeCount    = $item->likeCount();
+        $likesCount    = $item->likesCount();
 
-        $contentCount = $item->commentCount();
+        $contentsCount = $item->commentsCount();
 
         return view('items.show', compact(
             'item',
             'categories',
             'isLiked',
-            'likeCount',
-            'contentCount',
+            'likesCount',
+            'contentsCount',
         ));
     }
 

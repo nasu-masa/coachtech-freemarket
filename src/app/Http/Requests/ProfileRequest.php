@@ -20,7 +20,7 @@ class ProfileRequest extends FormRequest
             'avatar'      => ['nullable', 'mimes:jpeg,png'],
             'name'        => ['required', 'string', 'max:20'],
             'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'],
-            'address'     => ['required', 'string'],
+            'address'     => ['required', 'string']
         ];
     }
 

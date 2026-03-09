@@ -52,7 +52,7 @@
                             class="p-item-detail__icon-button p-item-detail__like-button {{ $isLiked ? 'is-liked' : '' }}">
                         </button>
 
-                        <span class="p-item-detail__count">{{ $likeCount }}</span>
+                        <span class="p-item-detail__count">{{ $likesCount }}</span>
                     </form>
                 </div>
 
@@ -62,7 +62,7 @@
                         class="p-item-detail__icon-button p-item-detail__stock-button
                             p-item-detail__comment-scroll-button">
                     </button>
-                    <span class="p-item-detail__count">{{ $contentCount }}</span>
+                    <span class="p-item-detail__count">{{ $contentsCount }}</span>
                 </div>
             </div>
 
@@ -114,7 +114,7 @@
         {{-- コメントブロック --}}
         <div class="p-item-detail__comments">
             <h3 class="p-item-detail__comments-title">
-                コメント({{ $contentCount }})
+                コメント({{ $contentsCount }})
             </h3>
             <div class="p-item-detail__comments-user">
 
