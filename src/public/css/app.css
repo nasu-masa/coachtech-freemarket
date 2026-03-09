@@ -129,6 +129,8 @@
 }
 
 .p-item-detail__image-container {
+    position: sticky;
+    top: 0;
     padding: 36px 45px;
 }
 
