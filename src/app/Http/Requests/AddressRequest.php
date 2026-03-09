@@ -3,9 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\AddressAttributesTrait;
 
 class AddressRequest extends FormRequest
 {
+    use AddressAttributesTrait;
+
     public function authorize()
     {
         return true;
@@ -18,4 +21,5 @@ class AddressRequest extends FormRequest
             'address'     => ['required'],
         ];
     }
+
 }

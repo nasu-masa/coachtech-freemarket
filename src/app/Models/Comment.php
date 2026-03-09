@@ -25,7 +25,7 @@ class Comment extends Model
         return $this->belongsTo(Item::class);
     }
 
-    public static function createFromRequest(array $attributes)
+    public static function createFromAttributes(array $attributes)
     {
         return self::create([
             'user_id' => $attributes['user_id'],

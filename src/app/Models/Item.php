@@ -44,8 +44,8 @@ class Item extends Model
     public function isLikedBy($userId)
     {
         return $this->myListItems()
-                ->where('user_id', $userId)
-                ->exists();
+            ->where('user_id', $userId)
+            ->exists();
     }
 
     public function likeCount()
@@ -75,22 +75,13 @@ class Item extends Model
         }
     }
 
-    public static function createFromRequest($request)
+    public static function createFromAttributes(array $attributes)
     {
-        $path = $request->file('image')->store('items', 'public');
+        $path = $attributes['image']->store('items', 'public');
 
-        $item = self::create([
-            'name'         => $request->name,
-            'brand'        => $request->brand,
-            'description'  => $request->description,
-            'price'        => $request->price,
-            'condition'    => $request->condition,
-            'user_id'      => $request->user()->id,
-            'image_path'   => $path,
-        ]);
+        unset($attributes['image']);
+        $attributes['image_path'] = $path;
 
-        $item->categories()->sync($request->categories);
-
-        return $item;
+        return self::create($attributes);
     }
 }

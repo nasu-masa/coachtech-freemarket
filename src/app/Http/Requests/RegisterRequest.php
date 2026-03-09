@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterRequest extends FormRequest
 {
@@ -37,5 +38,15 @@ class RegisterRequest extends FormRequest
             'password_confirmation.required' => '確認用パスワードを入力してください',
             'password_confirmation.min'      => '確認用パスワードは:min文字以上で入力してください'
         ];
+
     }
+
+    public function toRegisterAttributes(){
+        return [
+            'name'     => $this->name,
+            'email'    => $this->email,
+            'password' => Hash::make($this->password)
+        ];
+    }
+
 }

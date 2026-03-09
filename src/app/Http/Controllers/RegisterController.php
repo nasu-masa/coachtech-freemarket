@@ -16,7 +16,7 @@ class RegisterController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        $user = User::register($request->validated());
+        $user = User::storeRegister($request->toRegisterAttributes());
 
         Auth::login($user);
 
@@ -25,3 +25,4 @@ class RegisterController extends Controller
         return view('auth.verify-email');
     }
 }
+

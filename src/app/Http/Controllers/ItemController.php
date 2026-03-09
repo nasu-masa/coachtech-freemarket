@@ -29,7 +29,7 @@ class ItemController extends Controller
             });
         }
 
-        $items = $query->search($keyword)->get();
+        $items = $query->search($keyword)->paginate(20);
 
         return view('items.index', compact('items', 'keyword', 'tab'));
     }
@@ -46,20 +46,14 @@ class ItemController extends Controller
 
         $likeCount    = $item->likeCount();
 
-        $content      = $item->latestComment;
-
         $contentCount = $item->commentCount();
-
-        $avatar       = $content?->user?->avatar_path ?? null;
 
         return view('items.show', compact(
             'item',
             'categories',
             'isLiked',
             'likeCount',
-            'content',
             'contentCount',
-            'avatar',
         ));
     }
 
@@ -72,7 +66,9 @@ class ItemController extends Controller
 
     public function store(ExhibitionRequest $request)
     {
-        $item = Item::createFromRequest($request);
+        $item = Item::createFromAttributes($request->toItemAttributes());
+
+        $item->categories()->sync($request->categories());
 
         return redirect()->route('item.show', $item->id);
     }

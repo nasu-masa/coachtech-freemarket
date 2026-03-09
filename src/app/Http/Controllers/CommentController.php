@@ -10,11 +10,7 @@ class CommentController extends Controller
 
     public function store(CommentRequest $request, $item_id)
     {
-        Comment::createFromRequest([
-            'user_id' => $request->user()->id,
-            'item_id' => $item_id,
-            'content' => $request->validated()['content'],
-        ]);
+        Comment::createFromAttributes($request->toCommentAttributes($item_id));
 
         return redirect()->back();
     }

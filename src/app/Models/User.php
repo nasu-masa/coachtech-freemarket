@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Hash;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -30,28 +29,21 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public static function register(array $attributes)
+    public static function storeRegister(array $attributes)
     {
         $user = self::create([
-            'name'   => $attributes['name'],
-            'email'  => $attributes['email'],
-            'password' => Hash::make($attributes['password']),
+            'name'     => $attributes['name'],
+            'email'    => $attributes['email'],
+            'password' => $attributes['password']
         ]);
 
         return $user;
-
     }
 
     public function storeProfile(array $attributes)
     {
         $this->fill($attributes);
-
-        if(isset($attributes['avatar']) && $attributes['avatar']) {
-            $path = $attributes['avatar']->store('avatars', 'public');
-            $this->avatar_path = $path;
-
-            $this->save();
-        }
+        $this->save();
     }
 
     public function items()
@@ -94,7 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Address::class)->latestOfMany();
     }
 
-    public function addAddress(array $attributes)
+    public function storeAddress(array $attributes)
     {
         return $this->addresses()->create([
             'postal_code' => $attributes['postal_code'],

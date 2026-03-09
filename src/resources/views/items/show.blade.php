@@ -119,17 +119,18 @@
             <div class="p-item-detail__comments-user">
 
                 <div class="p-item-detail__comments-user-image"
-                    style="background-image: url('{{ asset("storage/$avatar") }}')">
+                    style="background-image:
+                    url('{{ asset("storage/" . ($item->latestComment?->user?->avatar_path ?? '')) }}')">
                 </div>
 
                 <label class="p-item-detail__comments-user-name">
-                    {{ $content?->user->name ?? 'admin' }}
+                    {{ $item?->latestComment?->user->name ?? 'admin' }}
                 </label>
             </div>
 
             <p id="commentList" class="p-item-detail__comments-list">
                 <span class="p-item-detail__comments-text">
-                    {{ $content?->content ?? 'こちらにコメントが入ります。' }}
+                    {{ $item?->latestComment?->content ?? 'こちらにコメントが入ります。' }}
                 </span>
             </p>
 

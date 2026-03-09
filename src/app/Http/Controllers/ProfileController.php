@@ -37,12 +37,9 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        $user->storeProfile([
-            'name' => $request->name,
-            'avatar' => $request->file('avatar')
-        ]);
+        $user->storeProfile($request->toProfileAttributes());
 
-        $user->addAddress($request->only('postal_code', 'address', 'building'));
+        $user->storeAddress($request->toAddressAttributes());
 
         return redirect()->route('items.index');
     }

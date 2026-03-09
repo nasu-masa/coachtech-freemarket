@@ -21,11 +21,7 @@ class AddressController extends Controller
     {
         $user = auth()->user();
 
-        $user->addAddress($request->only(
-            'postal_code',
-            'address',
-            'building'
-        ));
+        $user->storeAddress($request->toAddressAttributes());
 
         return redirect()->route('purchase.checkout', ['item_id' => $item_id]);
     }

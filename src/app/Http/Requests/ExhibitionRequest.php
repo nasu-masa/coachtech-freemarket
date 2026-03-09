@@ -22,4 +22,22 @@ class ExhibitionRequest extends FormRequest
             'price'       => ['required', 'numeric', 'min:0'],
         ];
     }
+
+    public function toItemAttributes()
+    {
+        return [
+            'name'        => $this->name,
+            'brand'       => $this->brand,
+            'description' => $this->description,
+            'price'       => (int) $this->price,
+            'condition'   => $this->condition,
+            'user_id'     => $this->user()->id,
+            'image'       => $this->file('image')
+        ];
+    }
+
+    public function categories()
+    {
+        return $this->input('categories', []);
+    }
 }

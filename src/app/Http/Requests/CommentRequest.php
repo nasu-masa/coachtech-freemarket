@@ -25,4 +25,13 @@ class CommentRequest extends FormRequest
             'content.max'      => 'コメントは255文字以内で入力してください。',
         ];
     }
+
+    public function toCommentAttributes($item_id)
+    {
+        return [
+            'user_id' => $this->user()->id,
+            'item_id' => $item_id,
+            'content' => $this->input('content')
+        ];
+    }
 }
