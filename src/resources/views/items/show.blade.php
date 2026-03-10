@@ -119,8 +119,8 @@
             <div class="p-item-detail__comments-user">
 
                 <div class="p-item-detail__comments-user-image"
-                    style="background-image:
-                    url('{{ asset("storage/" . ($item->latestComment?->user?->avatar_path ?? '')) }}')">
+                    style="--avatar-url: url(
+                    '{{ asset('storage/' . $item->latestComment?->user?->avatar_path ?? '') }}')">
                 </div>
 
                 <label class="p-item-detail__comments-user-name">

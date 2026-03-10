@@ -319,6 +319,7 @@
     height: 70px;
     border-radius: 50%;
     background: #d9d9d9;
+    background-image: var(--avatar-url);
     background-size: cover;
     background-position: center;
     object-fit: cover;
