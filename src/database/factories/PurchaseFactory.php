@@ -15,7 +15,9 @@ class PurchaseFactory extends Factory
             'user_id'        => User::factory(),
             'item_id'        => Item::factory(),
             'address_id'     => Address::factory(),
+
             'payment_method' => 'card',
+
             'purchased_at'   => now()
         ];
     }

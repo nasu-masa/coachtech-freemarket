@@ -13,6 +13,7 @@ class CommentFactory extends Factory
         return [
             'item_id' => Item::factory(),
             'user_id' => User::factory(),
+
             'content' => $this->faker->realText(20),
         ];
     }

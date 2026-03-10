@@ -13,6 +13,7 @@ class AddressFactory extends Factory
             'address'     => $this->faker->prefecture()
                             . $this->faker->city()
                             . $this->faker->streetAddress(),
+
             'building'    => $this->faker->secondaryAddress(),
         ];
     }
