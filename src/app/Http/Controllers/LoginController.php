@@ -23,7 +23,7 @@ class LoginController extends Controller
                 return redirect()->route('verification.notice');
             }
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
