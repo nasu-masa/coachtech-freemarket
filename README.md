@@ -24,6 +24,7 @@ docker-compose up -d --build
 # ◆ storage ディレクトリの初期化と共有
 
 ホスト側で実行：
+
 ```bash
 mkdir -p src/storage/framework/sessions
 mkdir -p src/storage/framework/views
@@ -31,14 +32,17 @@ mkdir -p src/storage/framework/cache
 ```
 
 コンテナ内で権限を修正：
+
 ```bash
 docker-compose exec php bash
 ```
+
 ```bash
 chown -R www-data:www-data storage
 chmod -R 775 storage
 
 ```
+
 # ◆ storageディレクトリを初期化しホストと共有する理由
 
 Laravel の storage は、キャッシュ・セッション・ビュー・アップロード画像など
@@ -82,7 +86,9 @@ php artisan storage:link
 ```bash
 cp .env .env.testing  # 必要に応じて環境変数を変更
 ```
+
 # .env.testing の変更ポイント
+
 ```bash
 APP_ENV=testing
 APP_DEBUG=true
@@ -93,6 +99,7 @@ DB_PASSWORD=laravel_pass
 ```
 
 # .env からコピーしたAPP_KEYを削除し .env.testing用に作り直します
+
 ```bash
 php artisan key:generate --env=testing
 ```
@@ -138,10 +145,12 @@ GRANT ALL PRIVILEGES ON demo_test.* TO 'laravel_user'@'%';
 FLUSH PRIVILEGES;
 exit;
 ```
+
 ```bash
 exit;
 docker compose exec php bash
 ```
+
 再度migrate:freshを実行してください
 
 ```bash
@@ -149,6 +158,7 @@ php artisan migrate:fresh --env=testing
 ```
 
 4. テストの実行
+
 ```bash
 php artisan test --env=testing
 ```
@@ -167,17 +177,16 @@ composer require stripe/stripe-php
 ```
 
 ---
+
 ### ◆ Stripe の環境変数（.env）
 
-
 # Stripe
+
 STRIPE_KEY=pk_test_1234567890abcdef
 STRIPE_SECRET=sk_test_1234567890abcdef
 
-
 ※ 本アプリでは Stripe の「テスト用のkey（pk_test / sk_test）」を使用しているため各々のテスト用test-keyをご使用ください。
-  Feature テストでは StripeService をモック(代用品を使用)しているため、Stripe API は実際には呼ばれません。
-
+Feature テストでは StripeService をモック(代用品を使用)しているため、Stripe API は実際には呼ばれません。
 
 ## ◆ 開発環境 URL
 
@@ -247,57 +256,57 @@ ER図では以下のエンティティを定義しています：
 
 ## ◆ 主なルーティング一覧（web.php） ※抜粋
 
-| 画面                | メソッド | パス                 | コントローラー                   |
-|--------------------|----------|----------------------|--------------------------------|
-| 商品一覧           | GET      | /                    | ItemController@index           |
-| 商品詳細           | GET      | /item/{id}           | ItemController@show            |
-| 出品フォーム       | GET      | /sell                | ItemController@create          |
-| 出品処理           | POST     | /sell                | ItemController@store           |
-| コメント投稿       | POST     | /item/{id}/comments  | CommentController@store        |
-| いいね追加         | POST     | /item/{id}/like      | MyListItemController@store     |
-| 購入確認           | GET      | /purchase/{id}       | PurchaseController@create      |
-| 購入処理           | POST     | /purchase/{id}       | PurchaseController@store       |
-| マイページ         | GET      | /mypage              | ProfileController@index        |
-| プロフィール編集   | GET      | /mypage/profile      | ProfileController@edit         |
+| 画面             | メソッド | パス                | コントローラー             |
+| --------------- | -------- | ------------------- | -------------------------- |
+| 商品一覧         | GET      | /                   | ItemController@index       |
+| 商品詳細         | GET      | /item/{id}          | ItemController@show        |
+| 出品フォーム     | GET      | /sell               | ItemController@create      |
+| 出品処理         | POST     | /sell               | ItemController@store       |
+| コメント投稿     | POST     | /item/{id}/comments | CommentController@store    |
+| いいね追加       | POST     | /item/{id}/like     | MyListItemController@store |
+| 購入確認         | GET      | /purchase/{id}      | PurchaseController@create  |
+| 購入処理         | POST     | /purchase/{id}      | PurchaseController@store   |
+| マイページ       | GET      | /mypage             | ProfileController@index    |
+| プロフィール編集 | GET      | /mypage/profile     | ProfileController@edit     |
 
 ## ◆ コントローラー 一覧（Controller）
 
-| コントローラーファイル名   | 説明                                                        |
-| ------------------------ | ---------------------------------------------------------- |
-| ItemController.php       | 商品一覧・詳細・出品フォーム・出品処理を管理                   |
-| MyListItemController.php | マイリスト（お気に入り）追加を管理                            |
-| CommentController.php    | 商品へのコメント投稿を管理                                   |
-| PurchaseController.php   | 購入確認画面・購入処理を管理                                 |
-| AddressController.php    | 購入時の住所変更画面・住所更新処理を管理                      |
-| ProfileController.php    | マイページ、購入履歴・出品履歴、プロフィール編集・更新を管理    |
-| RegisterController.php   | 会員登録フォーム表示（処理は Fortify が担当）                 |
-| LoginController.php      | ログインフォーム表示（処理は Fortify が担当）                 |
+| コントローラーファイル名 | 説明                                                         |
+| ------------------------ | --------------------------------------------------------- |
+| ItemController.php       | 商品一覧・詳細・出品フォーム・出品処理を担当                  |
+| MyListItemController.php | マイリスト（お気に入り）追加を担当                           |
+| CommentController.php    | 商品へのコメント投稿を担当                                   |
+| PurchaseController.php   | 購入確認画面・購入処理を担当                                 |
+| AddressController.php    | 購入時の住所変更画面・住所更新処理を担当                      |
+| ProfileController.php    | マイページ、購入履歴・出品履歴、プロフィール編集・更新を担当    |
+| RegisterController.php   | 会員登録フォームの表示と、登録処理を担当                      |
+| LoginController.php      | ログインフォームの表示と、ログイン処理を担当                  |
 
 ## ◆ モデル 一覧（Model）
 
-| モデルファイル名 | 説明                                                                                 |
-| ---------------- | ---------------------------------------------------------------------------------- |
-| User.php         | ユーザー情報を管理                                                                   |
-| Address.php      | ユーザーの住所情報（郵便番号・都道府県・市区町村・番地・建物名）を管理                    |
-| Category.php     | 商品カテゴリを管理                                                                   |
-| Comment.php      | 商品へのコメントを管理                                                               |
-| Item.php         | 出品された商品データ（画像・タイトル・説明・価格・カテゴリ・ブランド・状態・出品者）を管理 |
-| MyListItem.php   | ユーザーのお気に入り（マイリスト）を管理                                               |
-| Purchase.php     | 購入情報（購入者・商品・購入日時・金額）を管理                                          |
+| モデルファイル名 | 説明                                                                                       |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| User.php         | ユーザー情報を管理                                                                         |
+| Address.php      | ユーザーの住所情報（郵便番号・都道府県・市区町村・番地・建物名）を管理                          |
+| Category.php     | 商品カテゴリを管理                                                                         |
+| Comment.php      | 商品へのコメントを管理                                                                      |
+| Item.php         | 出品された商品データ（画像・タイトル・説明・価格・カテゴリ・ブランド・状態・出品者）を管理        |
+| MyListItem.php   | ユーザーのお気に入り（マイリスト）を管理                                                     |
+| Purchase.php     | 購入情報（購入者・商品・購入日時・金額）を管理                                                |
 
 ## ◆ ビュー 一覧（Bladeファイル）
 
 | 画面名称                         | Bladeファイル名                 |
-| ------------------------------- | ------------------------------- |
-| 商品一覧画面（トップ画面）        | items/index.blade.php           |
+| -------------------------------  | ----------------------------- |
+| 商品一覧画面（トップ画面）         | items/index.blade.php          |
 | 会員登録画面                     | auth/register.blade.php         |
 | ログイン画面                     | auth/login.blade.php            |
 | 商品詳細画面                     | items/show.blade.php            |
 | 商品購入画面                     | purchase/create.blade.php       |
-| 配送先住所変更画面                | purchase/address_edit.blade.php |
+| 配送先住所変更画面               | purchase/address_edit.blade.php |
 | 商品出品画面                     | items/create.blade.php          |
 | プロフィール画面                 | mypage/index.blade.php          |
-| プロフィール編集画面（設定画面）   | mypage/profile_edit.blade.php  |
+| プロフィール編集画面（設定画面）  | mypage/profile_edit.blade.php   |
 | メール認証誘導画面               | auth/verify_email.blade.php     |
 
 ## ◆ フロントエンド構成（CSS / JS）
