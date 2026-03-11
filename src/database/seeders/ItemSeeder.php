@@ -121,13 +121,11 @@ class ItemSeeder extends Seeder
 
         foreach ($items as $data) {
 
-            // まず画像を保存してパスを作る
             $source = public_path('products/' . $data['image']);
             $filename = 'items/' . Str::random(20) . '.jpg';
 
             Storage::disk('public')->put($filename, File::get($source));
 
-            // 画像パスを含めて item を作成
             $item = Item::create([
                 'user_id'     => Arr::random($userIds),
                 'name'        => $data['name'],
@@ -139,7 +137,6 @@ class ItemSeeder extends Seeder
                 'image_path'  => $filename,
             ]);
 
-            // カテゴリ紐付け
             $item->categories()->attach($data['categories']);
         }
     }

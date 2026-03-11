@@ -59,7 +59,10 @@ volumes:
 
 ## ◆ Laravel セットアップ
 
-phpコンテナ内で
+```bash
+docker-compose exec php bash
+```
+
 ```bash
 composer install
 ```
@@ -272,7 +275,7 @@ ER図では以下のエンティティを定義しています：
 
 ## ◆ 主なルーティング一覧（web.php） ※抜粋
 
-| 画面             | メソッド | パス                | コントローラー             |
+| 画面             | メソッド | パス                 | コントローラー              |
 | --------------- | -------- | ------------------- | -------------------------- |
 | 商品一覧         | GET      | /                   | ItemController@index       |
 | 商品詳細         | GET      | /item/{id}          | ItemController@show        |
@@ -283,7 +286,7 @@ ER図では以下のエンティティを定義しています：
 | 購入確認         | GET      | /purchase/{id}      | PurchaseController@create  |
 | 購入処理         | POST     | /purchase/{id}      | PurchaseController@store   |
 | マイページ       | GET      | /mypage             | ProfileController@index    |
-| プロフィール編集 | GET      | /mypage/profile     | ProfileController@edit     |
+| プロフィール編集  | GET      | /mypage/profile     | ProfileController@edit     |
 
 ## ◆ コントローラー 一覧（Controller）
 

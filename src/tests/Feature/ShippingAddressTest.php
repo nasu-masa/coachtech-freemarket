@@ -50,7 +50,6 @@ class ShippingAddressTest extends TestCase
 
         $this->get(route('purchase.checkout', ['item_id' => $item->id]));
 
-        // 購入処理
         $user->purchaseItem($item, 'card');
 
         $purchase = Purchase::where('user_id', $user->id)

@@ -35,7 +35,6 @@ class UserProfileTest extends TestCase
 
         $this->actingAs($user);
 
-        // プロフィールページ（出品した商品タブ）
         $response = $this->get(route('mypage.index'));
 
         $response->assertSee('テスト太郎');
@@ -45,7 +44,6 @@ class UserProfileTest extends TestCase
             $response->assertSee($item->name);
         }
 
-        // 購入済みタブ
         $response = $this->get('/mypage?page=buy');
 
         foreach ($purchasedItems as $purchase) {

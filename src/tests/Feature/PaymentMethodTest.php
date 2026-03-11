@@ -18,17 +18,14 @@ class PaymentMethodTest extends TestCase
 
         $this->actingAs($user);
 
-        // 購入手続きページを開く
         $this->get(route('purchase.checkout', ['item_id' => $item->id]));
 
-        // 支払い方法を選択して反映させる
         $response = $this->post(route('purchase.store', ['item_id' => $item->id]), [
             'payment_method' => 'convenience',
         ]);
 
         $response = $this->followRedirects($response);
 
-        // 選んだ支払い方法が表示されていること
         $response->assertSee('コンビニ払い');
     }
 }

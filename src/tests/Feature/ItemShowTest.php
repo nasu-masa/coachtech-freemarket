@@ -41,7 +41,6 @@ class ItemShowTest extends TestCase
 
         $response = $this->get(route('item.show', ['item_id' => $item->id]));
 
-        // 商品情報
         $response->assertSee($item->image_path);
         $response->assertSee('金の斧');
         $response->assertSee('golden weapon');
@@ -49,12 +48,10 @@ class ItemShowTest extends TestCase
         $response->assertSee($item->description);
         $response->assertSee('目立った傷や汚れなし');
 
-        // コメント
         $response->assertSee('test_profile.jpg');
         $response->assertSee($commentUser->name);
         $response->assertSee('本物の金でできてるんですか？');
 
-        // いいね数
         $response->assertSee('3');
     }
 

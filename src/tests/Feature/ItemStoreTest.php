@@ -23,7 +23,6 @@ class ItemStoreTest extends TestCase
 
         $category = Category::factory()->create();
 
-        // 出品ページ表示
         $this->get(route('sell.create'));
 
         $postData = [
@@ -36,13 +35,11 @@ class ItemStoreTest extends TestCase
             'image'       => UploadedFile::fake()->create('test.jpeg', 100, 'image/jpeg'),
         ];
 
-        // 商品登録
         $response = $this->post(route('sell.store'), $postData);
 
         $item = Item::first();
         $response->assertRedirect(route('item.show', ['item_id' => $item->id]));
 
-        // items テーブル
         $this->assertDatabaseHas('items', [
             'condition'   => '良好',
             'name'        => '黄金の斧',
@@ -52,13 +49,11 @@ class ItemStoreTest extends TestCase
             'image_path'  => $item->image_path,
         ]);
 
-        // 中間テーブル（カテゴリ紐付け）
         $this->assertDatabaseHas('category_item', [
             'item_id'     => $item->id,
             'category_id' => $category->id,
         ]);
 
-        // 画像アップロード
         Storage::disk('public')->assertExists($item->image_path);
     }
 }
