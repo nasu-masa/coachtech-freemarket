@@ -127,9 +127,9 @@ class ItemSeeder extends Seeder
         foreach ($items as $data) {
 
             $source = public_path('products/' . $data['image']);
-            $filename = 'items/' . Str::random(20) . '.jpg';
+            $fileName = 'items/' . Str::random(20) . '.jpg';
 
-            Storage::disk('public')->put($filename, File::get($source));
+            Storage::disk('public')->put($fileName, File::get($source));
 
             $item = Item::create([
                 'user_id'     => Arr::random($userIds),
@@ -139,7 +139,7 @@ class ItemSeeder extends Seeder
                 'description' => $data['description'],
                 'condition'   => $data['condition'],
                 'status'      => $data['status'],
-                'image_path'  => $filename,
+                'image_path'  => $fileName,
             ]);
 
             $item->categories()->attach($data['categories']);
