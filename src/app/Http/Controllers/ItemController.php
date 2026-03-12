@@ -23,7 +23,11 @@ class ItemController extends Controller
 
         $query = Item::where('user_id', '!=', auth()->id());
 
-        if ($tab === 'myList' && auth()->check()) {
+        if ($tab === 'myList') {
+            if (!auth()->check()) {
+                $query->whereRaw('1 = 0');
+            }
+
             $query->whereHas('myListItems', function ($q) {
                 $q->where('user_id', auth()->id());
             });

@@ -12,7 +12,7 @@
         <div class="c-input">
             <label class="c-input__label">メールアドレス</label>
             <input
-                type="email"
+                type="text"
                 name="email"
                 value="{{ old('email') }}"
                 class="c-input__field c-input--md">

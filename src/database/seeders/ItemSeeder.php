@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\MyListItem;
+use App\Models\Comment;
+use App\Models\Purchase;
 
 class ItemSeeder extends Seeder
 {
@@ -119,6 +122,8 @@ class ItemSeeder extends Seeder
             ],
         ];
 
+        $createdItems = [];
+
         foreach ($items as $data) {
 
             $source = public_path('products/' . $data['image']);
@@ -138,6 +143,50 @@ class ItemSeeder extends Seeder
             ]);
 
             $item->categories()->attach($data['categories']);
+
+            $createdItems[] = $item;
         }
+
+        $loginUser = User::where('email', 'test@example.com')->first();
+
+        $addressId = $loginUser->addresses()->first()->id;
+
+        $user2 = User::where('email', 'other@example.com')->first();
+
+        $itemA = $createdItems[0];
+
+        // user2 の商品を作る
+        $itemA->update(['user_id' => $user2->id]);
+
+        // user1 が itemA にいいね
+        MyListItem::create([
+            'user_id' => $loginUser->id,
+            'item_id' => $itemA->id,
+        ]);
+
+        // user1 が itemA にコメント
+        Comment::create([
+            'user_id' => $loginUser->id,
+            'item_id' => $itemA->id,
+            'content' => '購入します',
+        ]);
+
+        Purchase::create([
+            'user_id'        => $loginUser->id,   // 購入者
+            'item_id'        => $itemA->id,       // 購入された商品
+            'address_id'     => $addressId,
+            'payment_method' => 'card',
+            'purchased_at'   => now(),
+        ]);
+
+        $itemA->update([
+            'user_id' => $user2->id, // 出品者は user2
+            'status'  => 'sold',     // sold にする
+        ]);
+
+        $itemB = $createdItems[1];
+        $itemB->update([
+            'user_id' => $loginUser->id, // user1 の出品物にする
+        ]);
     }
 }

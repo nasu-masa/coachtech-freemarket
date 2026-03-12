@@ -78,7 +78,7 @@ exit
 code .        #.envファイルを必要に応じて環境変数変更）
 ```
 
-# ◆ マイグレーション & シーディング
+## ◆ マイグレーション & シーディング
 ```bash
 docker-compose exec php bash
 ```
@@ -88,6 +88,48 @@ php artisan db:seed
 php artisan storage:link
 ```
 
+## ◆Seeder により、以下のテストユーザーが作成されます。
+
+◎メインテストユーザー
+
+```bash
+メールアドレス: test@example.com
+パスワード: test7890
+```
+
+◎他のユーザー
+
+```bash
+メールアドレス: other@example.com
+パスワード: test7890
+```
+
+◎その他はfactoryにて生成したランダムユーザーです。
+
+## 🔐 ログイン方法
+
+アプリのログイン画面で、以下を入力してください。
+
+メールアドレス:
+```bash
+test@example.com
+```
+パスワード:
+```bash
+test7890
+```
+
+## このユーザーに付与されているダミーデータ
+
+### HDD
+- 出品した商品（1件）
+
+### 腕時計
+- 購入した商品（1件）
+- いいねした商品（1件）
+- コメントした商品（1件）
+
+
 ## ◆テスト環境のセットアップ
 
 1. テスト用 `.env.testing` ファイルの作成とアプリキーの生成
@@ -96,7 +138,7 @@ php artisan storage:link
 cp .env .env.testing  # 必要に応じて環境変数を変更
 ```
 
-# .env.testing の変更ポイント
+## .env.testing の変更ポイント
 
 ```bash
 APP_ENV=testing
@@ -107,7 +149,7 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
 
-# .env からコピーしたAPP_KEYを削除し .env.testing用に作り直します
+## .env からコピーしたAPP_KEYを削除し .env.testing用に作り直します
 
 ```bash
 php artisan key:generate --env=testing
