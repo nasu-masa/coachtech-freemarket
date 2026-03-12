@@ -88,7 +88,7 @@ php artisan db:seed
 php artisan storage:link
 ```
 
-## ◆Seeder により、以下のテストユーザーが作成されます。
+###　Seeder により、以下のテストユーザーが作成されます。
 
 ◎メインテストユーザー
 
@@ -110,11 +110,11 @@ php artisan storage:link
 
 アプリのログイン画面で、以下を入力してください。
 
-メールアドレス:
+メールアドレス　:
 ```bash
 test@example.com
 ```
-パスワード:
+パスワード　:
 ```bash
 test7890
 ```
