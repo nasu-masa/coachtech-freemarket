@@ -88,7 +88,7 @@ php artisan db:seed
 php artisan storage:link
 ```
 
-###　Seeder により、以下のテストユーザーが作成されます。
+※Seeder により、以下のテストユーザーが作成されます。
 
 ◎メインテストユーザー
 
