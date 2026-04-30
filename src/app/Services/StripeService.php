@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Item;
 use Illuminate\Support\Facades\URL;
 use Stripe\StripeClient;
-use App\Models\Item;
 
 class StripeService
 {
@@ -15,9 +15,6 @@ class StripeService
         $this->stripe = new StripeClient(config('services.stripe.secret'));
     }
 
-    /**
-     * 商品購入用の Stripe Checkout セッションを作成
-     */
     public function createCheckoutSession(Item $item)
     {
         return $this->stripe->checkout->sessions->create([

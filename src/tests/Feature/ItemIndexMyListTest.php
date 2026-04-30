@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Item;
 use App\Models\MyListItem;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ItemIndexMyListTest extends TestCase
 {
@@ -14,7 +14,7 @@ class ItemIndexMyListTest extends TestCase
 
     public function test_マイリストにはいいねした商品だけが表示され自分の商品は除外される()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $this->actingAs($user);
 
         $likedItem = Item::factory()->create([
@@ -45,7 +45,7 @@ class ItemIndexMyListTest extends TestCase
 
     public function test_マイリストの購入済み商品には_sold_ラベルが付与される()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $this->actingAs($user);
 
         $soldItem = Item::factory()->create([

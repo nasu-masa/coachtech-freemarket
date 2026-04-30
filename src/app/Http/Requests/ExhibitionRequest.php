@@ -6,6 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ExhibitionRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        if ($this->price) {
+            $this->merge([
+                'price' => str_replace(',', '', $this->price),
+            ]);
+        }
+    }
+
     public function authorize()
     {
         return true;

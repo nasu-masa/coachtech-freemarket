@@ -26,7 +26,7 @@ class CommentRequest extends FormRequest
         ];
     }
 
-    public function toCommentAttributes($item_id)
+    public function toCommentAttributes(int $item_id)
     {
         return [
             'user_id' => $this->user()->id,

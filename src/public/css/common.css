@@ -27,6 +27,48 @@
 }
 
 /* ================================
+    Flash Message
+================================ */
+
+.c-flash {
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    top: 96px;
+    right: 16px;
+    border: 1px solid transparent;
+    transition: opacity 0.6s ease;
+    opacity: 0.9;
+
+    z-index: 1000;
+}
+
+.c-flash__inner {
+    display: inline-block;
+    backdrop-filter: blur(4px);
+    padding: 16px 24px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.c-flash.is-hidden {
+    opacity: 0;
+}
+
+.c-flash--success {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+}
+
+.c-flash--error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+/* ================================
     Card
 ================================ */
 
@@ -183,6 +225,12 @@
 
 .c-button--primary:hover {
     background-color: #F04A4A;
+}
+
+.c-button.disabled {
+    background-color: var(--color-gray);
+    pointer-events: none;
+    border: none;
 }
 
 /* ================================

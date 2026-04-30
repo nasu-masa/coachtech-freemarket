@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
+use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
@@ -17,9 +17,9 @@ class ProfileController extends Controller
             $tab = 'sell';
         }
 
-        $items =  match ($tab) {
-            'buy'  => $user->purchasedItems(),
-            'sell' => $user->items
+        $items = match ($tab) {
+            'buy'  => $user->purchasedItems()->paginate(50),
+            'sell' => $user->items()->paginate(50),
         };
 
         return view('mypage.index', compact('tab', 'user', 'items'));
@@ -41,6 +41,7 @@ class ProfileController extends Controller
 
         $user->storeAddress($request->toAddressAttributes());
 
-        return redirect()->route('items.index');
+        return redirect()->route('items.index')
+            ->with('success', 'プロフィール設定が完了しました');
     }
 }

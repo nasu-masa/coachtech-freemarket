@@ -7,8 +7,7 @@ use App\Models\Comment;
 
 class CommentController extends Controller
 {
-
-    public function store(CommentRequest $request, $item_id)
+    public function store(CommentRequest $request, int $item_id)
     {
         Comment::createFromAttributes($request->toCommentAttributes($item_id));
 

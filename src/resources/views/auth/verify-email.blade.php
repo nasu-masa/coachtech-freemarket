@@ -16,7 +16,7 @@
     </div>
 
     <div class="c-link p-email-link">
-        <form action="/email/resend" method="post">
+        <form action="{{ route('verification.send') }}" method="post">
             @csrf
             <button type="submit"
                 class="c-link__text p-email-link__text">

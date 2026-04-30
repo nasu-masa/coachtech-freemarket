@@ -1,5 +1,5 @@
 # Laravel vendor & node
-/vendor/
+**/vendor/
 /node_modules/
 
 # Laravel environment files
@@ -12,8 +12,8 @@
 /bootstrap/cache/*.php
 
 # IDE / Editor
+**/.vscode/
 /.idea
-/.vscode
 
 # NPM / Yarn logs
 npm-debug.log
@@ -28,3 +28,5 @@ docker-compose.override.yml
 # Homestead
 Homestead.json
 Homestead.yaml
+
+**/.php-cs-fixer.cache

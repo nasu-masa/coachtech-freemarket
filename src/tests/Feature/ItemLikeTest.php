@@ -2,22 +2,29 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Item;
 use App\Models\MyListItem;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ItemLikeTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_ユーザーが商品にいいねできカウントが増える()
+    private function setupUserAndItem(): array
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $item = Item::factory()->create();
 
         $this->actingAs($user);
+
+        return [$user, $item];
+    }
+
+    public function test_ユーザーが商品にいいねできカウントが増える()
+    {
+        [$user, $item] = $this->setupUserAndItem();
 
         $this->post(route('item.like', ['item_id' => $item->id]));
 
@@ -33,15 +40,12 @@ class ItemLikeTest extends TestCase
 
     public function test_いいね済みの場合は_isLiked_クラスが付与される()
     {
-        $user = User::factory()->create();
-        $item = Item::factory()->create();
+        [$user, $item] = $this->setupUserAndItem();
 
         MyListItem::factory()->create([
             'user_id' => $user->id,
             'item_id' => $item->id,
         ]);
-
-        $this->actingAs($user);
 
         $response = $this->get(route('item.show', ['item_id' => $item->id]));
         $response->assertSee('is-liked');
@@ -49,15 +53,12 @@ class ItemLikeTest extends TestCase
 
     public function test_ユーザーがいいね解除できカウントが減る()
     {
-        $user = User::factory()->create();
-        $item = Item::factory()->create();
+        [$user, $item] = $this->setupUserAndItem();
 
         MyListItem::factory()->create([
             'user_id' => $user->id,
             'item_id' => $item->id,
         ]);
-
-        $this->actingAs($user);
 
         $this->post(route('item.unlike', ['item_id' => $item->id]));
 

@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Item;
+use App\Models\User;
 use App\Policies\ItemPolicy;
+use Tests\TestCase;
 
 class ItemPolicyTest extends TestCase
 {

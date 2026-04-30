@@ -78,6 +78,22 @@
         </div>
     </header>
 
+        @if (session('success'))
+    <div class="c-flash">
+        <span class="c-flash__inner c-flash--success">
+            {{ session('success') }}
+        </span>
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="c-flash">
+        <span class="c-flash__inner c-flash--error">
+            {{ session('error') }}
+        </span>
+    </div>
+    @endif
+
     <main class="l-main">
 
         @yield('content')
@@ -85,6 +101,7 @@
     </main>
 
     @yield('scripts')
+    <script src="{{ asset('js/flash.js') }}"></script>
 
 </body>
 

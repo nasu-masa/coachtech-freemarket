@@ -5,7 +5,7 @@
 <div class="c-card">
     <h2 class="c-card__title p-register__title">会員登録</h2>
 
-    <form action="/register" method="POST">
+    <form action="{{ route('register') }}" method="POST">
         @csrf
 
         {{-- ユーザー名 --}}
@@ -88,7 +88,7 @@
     </form>
 
     <div class="c-link p-login__link">
-        <a href="/login" class="c-link__text">ログインはこちら</a>
+        <a href="{{ route('login') }}" class="c-link__text">ログインはこちら</a>
     </div>
 </div>
 

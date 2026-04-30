@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,7 +41,7 @@ class Item extends Model
         return $this->hasMany(MyListItem::class);
     }
 
-    public function isLikedBy($userId)
+    public function isLikedBy(?int $userId)
     {
         return $this->myListItems()
             ->where('user_id', $userId)
@@ -67,13 +68,11 @@ class Item extends Model
         return $this->comments_count ?? $this->comments()->count();
     }
 
-    public function scopeSearch($query, $keyword)
+    public function scopeSearch(Builder $query, ?string $keyword)
     {
-        if (!empty($keyword)) {
-            return $query->where('name', 'like', '%' . $keyword . '%');
-        }
-
-        return $query;
+        return $query->when($keyword, function ($query, $keyword) {
+            $query->where('name', 'like', '%' . $keyword . '%');
+        });
     }
 
     public static function createFromAttributes(array $attributes)

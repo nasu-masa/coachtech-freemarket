@@ -190,6 +190,7 @@
                     type="text"
                     name="price"
                     id="priceInput"
+                    inputmode="numeric"
                     value="{{ old('price') }}"
                     class="c-input__field c-input--price c-input--sm">
             </div>
@@ -214,5 +215,6 @@
 @endsection
 
 @section('scripts')
+<script src="{{ asset('js/price-input-format.js') }}"></script>
 <script src="{{ asset('js/select-ui-control.js') }}"></script>
 @endsection

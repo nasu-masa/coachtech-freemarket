@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Address;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Address;
 
 class UserProfileEditTest extends TestCase
 {
@@ -16,7 +16,7 @@ class UserProfileEditTest extends TestCase
         $user = User::factory()->create([
             'name'        => 'テスト太郎',
             'avatar_path' => 'test-avatar.png',
-        ]);
+        ])->first();
 
         Address::factory()->create([
             'user_id'     => $user->id,

@@ -2,54 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ExhibitionRequest;
-use App\Models\Item;
 use App\Models\Category;
+use App\Models\Item;
+use App\Services\ItemService;
+use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, ItemService $service)
     {
-        if ($request->filled('keyword')) {
-            session(['keyword' => $request->keyword]);
-        } elseif ($request->has('keyword')) {
-            session()->forget('keyword');
-        }
+        $indexItems = $service->getIndexItems($request);
 
-        $keyword = $request->input('keyword', session('keyword'));
-
-        $tab     = $request->query('tab', 'recommend');
-
-        $query = Item::where('user_id', '!=', auth()->id());
-
-        if ($tab === 'myList') {
-            if (!auth()->check()) {
-                $query->whereRaw('1 = 0');
-            }
-
-            $query->whereHas('myListItems', function ($q) {
-                $q->where('user_id', auth()->id());
-            });
-        }
-
-        $items = $query->search($keyword)->paginate(20);
-
-        return view('items.index', compact('items', 'keyword', 'tab'));
+        return view('items.index', $indexItems);
     }
 
-    public function show($item_id)
+    public function show(int $item_id)
     {
         $item = Item::with(['categories'])
                     ->withCount(['comments', 'myListItems'])
                     ->findOrFail($item_id);
 
         $categories   = $item->categories;
-
         $isLiked      = $item->isLikedBy(auth()->id());
-
         $likesCount    = $item->likesCount();
-
         $contentsCount = $item->commentsCount();
 
         return view('items.show', compact(
@@ -74,7 +50,8 @@ class ItemController extends Controller
 
         $item->categories()->sync($request->categories());
 
-        return redirect()->route('item.show', $item->id);
+        return redirect()->route('item.show', $item->id)
+            ->with('success', '出品が完了しました');
     }
 }
 

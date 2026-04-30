@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
-use App\Models\User;
 
 class EmailVerificationTest extends TestCase
 {
@@ -19,16 +19,16 @@ class EmailVerificationTest extends TestCase
 
         $this->post('/register', [
             'name'                  => 'test',
-            'email'                 => 'verifytest@example.com',
+            'email'                 => 'verifytest@gmail.com',
             'password'              => 'password12345',
             'password_confirmation' => 'password12345',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'verifytest@example.com',
+            'email' => 'verifytest@gmail.com',
         ]);
 
-        $user = User::where('email', 'verifytest@example.com')->first();
+        $user = User::where('email', 'verifytest@gmail.com')->first();
 
         Notification::assertSentTo($user, VerifyEmail::class);
         $this->assertNull($user->email_verified_at);
@@ -38,7 +38,7 @@ class EmailVerificationTest extends TestCase
     {
         $user = User::factory()->create([
             'email_verified_at' => null,
-        ]);
+        ])->first();
 
         $this->actingAs($user);
 
@@ -51,7 +51,7 @@ class EmailVerificationTest extends TestCase
     {
         $user = User::factory()->create([
             'email_verified_at' => now(),
-        ]);
+        ])->first();
 
         $this->actingAs($user);
 

@@ -1,16 +1,14 @@
 <?php
 
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MyListItemController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AddressController;
-use App\Http\Controllers\MyListItemController;
-use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,21 +21,13 @@ Route::get('/', [ItemController::class, 'index'])->name('items.index');
 // 商品詳細
 Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show');
 
-// 会員登録
-Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-// ログイン
-Route::get('/login', [LoginController::class, 'show'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.store');
-
 /*
 |--------------------------------------------------------------------------
 | Auth Required
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // いいね
     Route::post('/item/{item_id}/like', [MyListItemController::class, 'store'])
@@ -51,27 +41,29 @@ Route::middleware('auth')->group(function () {
     Route::post('/item/{item_id}/comments', [CommentController::class, 'store'])
         ->name('item.comments.store');
 
-    // 商品購入画面
-    Route::get('/purchase/{item_id}', [PurchaseController::class, 'checkout'])
-        ->name('purchase.checkout');
+    Route::middleware(['resolve.item'])->group(function () {
+        // 商品購入画面
+        Route::get('/purchase/{item_id}', [PurchaseController::class, 'checkout'])
+            ->name('purchase.checkout');
 
-    // 商品購入処理
-    Route::post('/purchase/{item_id}', [PurchaseController::class, 'store'])
-        ->name('purchase.store');
+        // 商品購入処理
+        Route::post('/purchase/{item_id}', [PurchaseController::class, 'store'])
+            ->name('purchase.store');
 
-    // Stripe 成功・キャンセル
-    Route::get('/success/{item_id}', [PurchaseController::class, 'success'])
-        ->name('purchase.success')
-        ->middleware('signed');
+        // Stripe 成功・キャンセル
+        Route::get('/success/{item_id}', [PurchaseController::class, 'success'])
+            ->name('purchase.success')
+            ->middleware('signed');
 
-    Route::get('/cancel/{item_id}', [PurchaseController::class, 'cancel'])
-        ->name('purchase.cancel');
+        Route::get('/cancel/{item_id}', [PurchaseController::class, 'cancel'])
+            ->name('purchase.cancel');
+    });
 
-    // 住所変更ページ
+    // 購入フロー： 住所変更ページ
     Route::get('/purchase/address/{item_id}', [AddressController::class, 'editAddress'])
         ->name('purchase.address.edit');
 
-    // 購入フロー：住所変更
+    // 購入フロー：住所変更処理
     Route::post('/purchase/address/{item_id}', [AddressController::class, 'storeAddress'])
         ->name('purchase.address.store');
 

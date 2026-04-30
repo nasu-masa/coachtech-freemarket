@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\Item;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ItemIndexTest extends TestCase
 {
@@ -36,7 +36,7 @@ class ItemIndexTest extends TestCase
 
     public function test_recommendタブでは自分の商品が除外される()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $this->actingAs($user);
 
         $ownItem = Item::factory()->create([

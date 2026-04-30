@@ -2,21 +2,28 @@
 
 namespace Tests\Feature;
 
+use App\Models\Item;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Item;
 
 class ItemCommentTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_ユーザーはコメントを投稿できる()
+    private function setupUserAndItem(): array
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $item = Item::factory()->create();
 
         $this->actingAs($user);
+
+        return [$user, $item];
+    }
+
+    public function test_ユーザーはコメントを投稿できる()
+    {
+        [$user, $item] = $this->setupUserAndItem();
 
         $this->post(route('item.comments.store', ['item_id' => $item->id]), [
             'content' => 'これはテストコメントです。',
@@ -51,10 +58,7 @@ class ItemCommentTest extends TestCase
 
     public function test_コメントは必須である()
     {
-        $user = User::factory()->create();
-        $item = Item::factory()->create();
-
-        $this->actingAs($user);
+        [$user, $item] = $this->setupUserAndItem();
 
         $this->post(route('item.comments.store', ['item_id' => $item->id]), [
             'content' => '',
@@ -71,10 +75,7 @@ class ItemCommentTest extends TestCase
 
     public function test_コメントは255文字以内である必要がある()
     {
-        $user = User::factory()->create();
-        $item = Item::factory()->create();
-
-        $this->actingAs($user);
+        [$user, $item] = $this->setupUserAndItem();
 
         $longText = str_repeat('あ', 256);
 

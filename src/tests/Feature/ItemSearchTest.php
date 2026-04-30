@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Item;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Item;
 
 class ItemSearchTest extends TestCase
 {
@@ -13,7 +13,7 @@ class ItemSearchTest extends TestCase
 
     public function test_部分一致キーワードで商品が検索できる()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $this->actingAs($user);
 
         Item::factory()->create(['name' => '金の斧']);

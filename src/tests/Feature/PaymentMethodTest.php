@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\Item;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class PaymentMethodTest extends TestCase
 {
@@ -13,7 +13,7 @@ class PaymentMethodTest extends TestCase
 
     public function test_選択した支払い方法が購入画面に反映される()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create()->first();
         $item = Item::factory()->create(['status' => 'selling']);
 
         $this->actingAs($user);

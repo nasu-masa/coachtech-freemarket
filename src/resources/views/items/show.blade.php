@@ -69,10 +69,25 @@
             <div class="l-button-wrapper">
                 <div class="l-button-wrapper">
 
+                    {{-- 出品者自身 & 販売中 --}}
+                    @if ($item->user_id === auth()->id() && $item->status === 'selling')
+                    <div class="c-button c-button--sm p-item-detail__button u-text-center disabled">
+                        出品中
+                    </div>
+
+                    {{-- 出品者以外 & 販売中 --}}
+                    @elseif ($item->status === 'selling')
                     <a href="{{ route('purchase.checkout', ['item_id' => $item->id]) }}"
-                        class="c-button c-button--sm c-button--primary p-item-detail__button">
+                        class="c-button c-button--sm c-button--primary p-item-detail__button u-text-center">
                         購入手続きへ
                     </a>
+
+                    {{-- 売り切れ --}}
+                    @elseif ($item->status === 'sold')
+                    <div class="c-button c-button--sm p-item-detail__button u-text-center disabled">
+                        売り切れました
+                    </div>
+                    @endif
 
                 </div>
 
@@ -157,6 +172,7 @@
                 </div>
 
                 <div class="l-button-wrapper">
+                    @auth
                     <button type="submit"
                         class="
                             c-button
@@ -164,6 +180,15 @@
                             c-button--primary">
                         コメントを送信する
                     </button>
+                    @else
+                    <button type="submit"
+                        class="
+                            c-button
+                            c-button--sm
+                            c-button--primary">
+                        ログインしてコメントする
+                    </button>
+                    @endauth
 
                 </div>
             </form>

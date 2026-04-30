@@ -24,24 +24,24 @@ class MyListItem extends Model
         return $this->belongsTo(Item::class);
     }
 
-    public static function myListedItem($user, $item_id)
+    public static function myListedItem(User $user, Item $item)
     {
         return MyListItem::where('user_id', $user->id)
-            ->where('item_id', $item_id)
+            ->where('item_id', $item->id)
             ->first();
     }
 
-    public static function add($user, $item_id)
+    public static function add(User $user,  Item $item)
     {
         return self::firstOrCreate([
             'user_id' => $user->id,
-            'item_id' => $item_id,
+            'item_id' => $item->id,
         ]);
     }
 
-    public static function remove($user, $item_id)
+    public static function remove(User $user, Item $item)
     {
-        $existing = self::myListedItem($user, $item_id);
+        $existing = self::myListedItem($user, $item);
 
         if ($existing) {
             $existing->delete();

@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -29,17 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public static function storeRegister(array $attributes)
-    {
-        $user = self::create([
-            'name'     => $attributes['name'],
-            'email'    => $attributes['email'],
-            'password' => $attributes['password']
-        ]);
-
-        return $user;
-    }
-
     public function storeProfile(array $attributes)
     {
         $this->fill($attributes);
@@ -58,21 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function purchasedItems()
     {
-        return $this->purchases()->with('item')->get()->pluck('item');
-    }
-
-    public function purchaseItem(Item $item, string $paymentMethod): Purchase
-    {
-        return DB::transaction(function () use ($item, $paymentMethod) {
-            $item->update(['status' => 'sold']);
-
-            return $this->purchases()->create([
-                'item_id'        => $item->id,
-                'address_id'     => $this->latestAddress->id,
-                'payment_method' => $paymentMethod,
-                'purchased_at'   => now(),
-            ]);
-        });
+        return Item::whereIn('id', $this->purchases()->pluck('item_id'));
     }
 
     public function addresses()
@@ -87,11 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function storeAddress(array $attributes)
     {
-        return $this->addresses()->create([
-            'postal_code' => $attributes['postal_code'],
-            'address'     => $attributes['address'],
-            'building'    => $attributes['building'],
-        ]);
+        return $this->addresses()->create($attributes);
     }
 
     public function myListItems()
