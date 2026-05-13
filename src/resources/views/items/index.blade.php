@@ -23,7 +23,7 @@
 
 {{-- 商品一覧 --}}
 <div class="c-product-list">
-    @foreach ($items as $item)
+    @forelse ($items as $item)
     <div class="c-product-card">
         <a href="{{ route('item.show', ['item_id' => $item->id]) }}" class="c-product-card__link">
             <div class="c-product-card__image-wrapper
@@ -43,7 +43,9 @@
             <p class="c-product-card__name">{{ $item->name }}</p>
         </a>
     </div>
-    @endforeach
+    @empty
+    <p class="c-empty-state">商品が見つかりませんでした。</p>
+    @endforelse
 </div>
 
 @endsection

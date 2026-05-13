@@ -14,7 +14,7 @@ class ItemService
             session(['keyword' => $request->keyword]);
         }
 
-        if ($request->has('keyword') && $request->keyword === '' || !$request->has('keyword')) {
+        if ($request->has('keyword') && $request->keyword === '') {
             session()->forget('keyword');
         }
     }

@@ -9,18 +9,18 @@ class AddressController extends Controller
 {
     public function editAddress(int $item_id)
     {
-        $item = Item::findOrFail($item_id);
-
         $user = auth()->user();
         $latestAddress = $user->latestAddress;
 
-        return view('purchase.address_edit', compact('item', 'latestAddress'));
+        return view('purchase.address_edit', [
+            'item' => Item::findOrFail($item_id),
+            'latestAddress' => $latestAddress
+        ]);
     }
 
     public function storeAddress(AddressRequest $request, int $item_id)
     {
         $user = auth()->user();
-
         $user->storeAddress($request->toAddressAttributes());
 
         return redirect()->route('purchase.checkout', ['item_id' => $item_id])

@@ -21,10 +21,10 @@ class PurchaseController extends Controller
 
     public function checkout(Item $item)
     {
-        $user = auth()->user();
-        $latestAddress = $user->latestAddress;
-
-        return view('purchase.checkout', compact('item', 'latestAddress'));
+        return view('purchase.checkout', [
+            'item' => $item,
+            'latestAddress' => auth()->user()->latestAddress,
+        ]);
     }
 
     public function store(PurchaseRequest $request, Item $item)

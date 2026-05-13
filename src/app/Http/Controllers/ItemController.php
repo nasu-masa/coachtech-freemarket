@@ -23,25 +23,20 @@ class ItemController extends Controller
                     ->withCount(['comments', 'myListItems'])
                     ->findOrFail($item_id);
 
-        $categories   = $item->categories;
-        $isLiked      = $item->isLikedBy(auth()->id());
-        $likesCount    = $item->likesCount();
-        $contentsCount = $item->commentsCount();
-
-        return view('items.show', compact(
-            'item',
-            'categories',
-            'isLiked',
-            'likesCount',
-            'contentsCount',
-        ));
+        return view('items.show',  [
+            'item'       => $item,
+            'categories' => $item->categories,
+            'isLiked'    => $item->isLikedBy(auth()->id()),
+            'likesCount' => $item->likesCount(),
+            'contentsCount' => $item->commentsCount(),
+        ]);
     }
 
     public function create()
     {
-        $categories = Category::all();
-
-        return view('items.create', compact('categories'));
+        return view('items.create', [
+            'categories' => Category::all()
+        ]);
     }
 
     public function store(ExhibitionRequest $request)

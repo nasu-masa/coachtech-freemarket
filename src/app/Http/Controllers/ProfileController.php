@@ -22,7 +22,7 @@ class ProfileController extends Controller
             'sell' => $user->items()->paginate(50),
         };
 
-        return view('mypage.index', compact('tab', 'user', 'items'));
+        return view('mypage.index', compact('user', 'tab', 'items'));
     }
 
     public function edit()
