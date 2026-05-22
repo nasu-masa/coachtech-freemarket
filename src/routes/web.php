@@ -108,6 +108,5 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 // 認証メールの再送
 Route::post('/email/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-    return redirect()
-        ->route('verification.notice');
+    return redirect()->route('verification.notice');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');

@@ -27,10 +27,10 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        $user = auth()->user();
-        $latestAddress = $user->latestAddress;
-
-        return view('mypage.profile_edit', compact('user', 'latestAddress'));
+        return view('mypage.profile_edit', [
+            'user' => auth()->user(),
+            'latestAddress' => auth()->user()->latestAddress,
+        ]);
     }
 
     public function store(ProfileRequest $request)

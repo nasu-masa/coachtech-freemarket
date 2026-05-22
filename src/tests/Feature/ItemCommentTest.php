@@ -44,7 +44,7 @@ class ItemCommentTest extends TestCase
     {
         $item = Item::factory()->create();
 
-        $response = $this->post(route('item.comments.store', ['item_id' => $item->id]), [
+        $response = $this->from(route('item.show', ['item_id' => $item->id]))->post(route('item.comments.store', ['item_id' => $item->id]), [
             'content' => 'ゲストコメント',
         ]);
 
@@ -60,9 +60,13 @@ class ItemCommentTest extends TestCase
     {
         [$user, $item] = $this->setupUserAndItem();
 
-        $this->post(route('item.comments.store', ['item_id' => $item->id]), [
+        $response = $this->from(route('item.show', ['item_id' => $item->id]))
+        ->post(route('item.comments.store', ['item_id' => $item->id]), [
             'content' => '',
         ]);
+
+        $response->assertRedirect(route('item.show', ['item_id' => $item->id]));
+        $response->assertSessionHasErrors(['content']);
 
         $response = $this->get(route('item.show', ['item_id' => $item->id]));
         $response->assertSee('コメントを入力してください');
@@ -79,10 +83,11 @@ class ItemCommentTest extends TestCase
 
         $longText = str_repeat('あ', 256);
 
-        $response = $this->post(route('item.comments.store', ['item_id' => $item->id]), [
+        $response = $this->from(route('item.show', ['item_id' => $item->id]))->post(route('item.comments.store', ['item_id' => $item->id]), [
             'content' => $longText,
         ]);
 
+        $response->assertRedirect(route('item.show', ['item_id' => $item->id]));
         $response->assertSessionHasErrors(['content']);
 
         $response = $this->get(route('item.show', ['item_id' => $item->id]));

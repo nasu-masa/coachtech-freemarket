@@ -23,7 +23,7 @@ class LoginTest extends TestCase
             'password' => 'password12345',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/login')->assertSessionHasErrors('email');
         $this->get('/login')->assertSee('メールアドレスを入力してください');
     }
 
@@ -39,7 +39,7 @@ class LoginTest extends TestCase
             'password' => '',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/login')->assertSessionHasErrors('password');
         $this->get('/login')->assertSee('パスワードを入力してください');
     }
 
@@ -55,7 +55,7 @@ class LoginTest extends TestCase
             'password' => 'wrong-password',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/login')->assertSessionHasErrors('email');
         $this->get('/login')->assertSee('ログイン情報が登録されていません');
     }
 

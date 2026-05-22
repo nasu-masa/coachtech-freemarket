@@ -24,7 +24,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password12345',
             'password_confirmation' => 'password12345'
-        ])->assertRedirect($this->registerUrl);
+        ])->assertRedirect($this->registerUrl)->assertSessionHasErrors(['name']);
 
         $this->get($this->registerUrl)->assertSee('お名前を入力してください');
     }
@@ -36,7 +36,7 @@ class RegisterTest extends TestCase
             'email' => '',
             'password' => 'password12345',
             'password_confirmation' => 'password12345'
-        ])->assertRedirect($this->registerUrl);
+        ])->assertRedirect($this->registerUrl)->assertSessionHasErrors(['email']);
 
         $this->get($this->registerUrl)->assertSee('メールアドレスを入力してください');
     }
@@ -48,7 +48,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => '',
             'password_confirmation' => ''
-        ])->assertRedirect($this->registerUrl);
+        ])->assertRedirect($this->registerUrl)->assertSessionHasErrors(['password']);
 
         $this->get($this->registerUrl)->assertSee('パスワードを入力してください');
     }
@@ -60,7 +60,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => '1234567',
             'password_confirmation' => '1234567'
-        ])->assertRedirect($this->registerUrl);
+        ])->assertRedirect($this->registerUrl)->assertSessionHasErrors(['password']);
 
         $this->get($this->registerUrl)->assertSee('パスワードは8文字以上で入力してください');
     }
@@ -72,7 +72,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password12345',
             'password_confirmation' => 'confirmation12345'
-        ])->assertRedirect($this->registerUrl);
+        ])->assertRedirect($this->registerUrl)->assertSessionHasErrors(['password']);
 
         $this->get($this->registerUrl)->assertSee('パスワードと一致しません');
     }

@@ -5,10 +5,13 @@ namespace Tests\Unit;
 use App\Models\Item;
 use App\Models\User;
 use App\Policies\ItemPolicy;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ItemPolicyTest extends TestCase
 {
+    use RefreshDatabase;
+
     private function makeUser(int $id)
     {
         return User::factory()->make(['id' => $id]);
